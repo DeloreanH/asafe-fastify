@@ -1,11 +1,7 @@
-import {
-
-  ExceptionBase
-} from '../../shared/exceptions';
+import { ExceptionBase } from '../../shared/exceptions';
 import { ApiErrorResponse, apiErrorResponseSchema } from '../../shared/api';
 import { FastifyError, FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-
 
 const fastifyErrorCodesMap = {
   FST_ERR_VALIDATION: (error: FastifyError) => ({
@@ -15,47 +11,48 @@ const fastifyErrorCodesMap = {
     })),
     statusCode: 400,
     message: 'Validation error',
-    error: 'Bad Request', // https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1
+    error: 'Bad Request',
   }),
   FST_ERR_NOT_FOUND: () => ({
     message: 'Not Found',
     error: 'Not Found',
-    statusCode: 404, //  'https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4',
+    statusCode: 404,
   }),
 };
 
 type FastifyErrorCodes = keyof typeof fastifyErrorCodesMap;
 
 async function errorHandlerPlugin(fastify: FastifyInstance) {
-  fastify.setErrorHandler((error: FastifyError | Error, _, res) => {
-    // Handle fastify errors
+  fastify.setErrorHandler((error: FastifyError | Error, request, reply) => {
+    // Handle Fastify errors
     if ('code' in error && error.code in fastifyErrorCodesMap) {
       const fastifyError = fastifyErrorCodesMap[error.code as FastifyErrorCodes];
 
       if (fastifyError) {
         const response = fastifyError(error as FastifyError);
-        return res.status(response.statusCode).send(response);
+        return reply.status(response.statusCode).send(response);
       }
     }
 
-    // Catch all other errors
-    fastify.log.error(error);
+    // Check for custom exceptions extending ExceptionBase
     if (error instanceof ExceptionBase) {
-      return res.status(error.statusCode).send({
+      return reply.status(error.statusCode).send({
         statusCode: error.statusCode,
         message: error.message,
         error: error.error,
       } satisfies ApiErrorResponse);
     }
 
-    return res.status(500).send({
+    // Catch-all for unknown errors
+    fastify.log.error(error);
+    return reply.status(500).send({
       statusCode: 500,
-      message: 'Internal Server Error',
+      message: error?.message || 'Internal Server Error',
       error: 'Internal Server Error',
     } satisfies ApiErrorResponse);
   });
 
-  // Add the ExceptionResponse schema to the fastify instance
+  // Add the ApiErrorResponse schema to the fastify instance
   fastify.addSchema(apiErrorResponseSchema);
 }
 
