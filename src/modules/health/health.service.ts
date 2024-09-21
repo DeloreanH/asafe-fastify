@@ -1,7 +1,7 @@
 export class HealthService {
   constructor() { }
 
-  check() {
-    return 'up';
+  getHealth() {
+    return 'OK';
   }
 }

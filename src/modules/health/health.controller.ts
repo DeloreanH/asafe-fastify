@@ -1,13 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { HealthService } from './health.service'; 
+import { HealthService } from './health.service';
 
 export class HealthController {
-    constructor(private healthService: HealthService) {
-        console.log("HealthController initialized with HealthService:", healthService);
-      }
+  constructor(private healthService: HealthService) { }
 
   async checkHealth(req: FastifyRequest, reply: FastifyReply) {
-    const status = this.healthService.check();
+    const status = this.healthService.getHealth();
     reply.send({ status });
   }
 }
