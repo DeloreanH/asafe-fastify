@@ -12,7 +12,6 @@ module.exports = {
         '<rootDir>/src/server/plugins/',                       // Ignore all plugins in the server
         '<rootDir>/src/shared/exceptions/',                    // Ignore shared exceptions
         '<rootDir>/src/modules/core.ts',                       // Ignore core.ts
-        // Add more paths as necessary
     ],
     coverageDirectory: 'coverage', 
     collectCoverage: true, 

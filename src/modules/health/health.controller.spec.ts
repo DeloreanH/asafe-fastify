@@ -1,5 +1,4 @@
-import fastify, { FastifyInstance } from 'fastify';
-import { createContainer, asClass, InjectionMode } from 'awilix';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { HealthController } from './health.controller';
 import { createTestContainer } from '../../utils/test.util';
 
@@ -8,28 +7,26 @@ class MockHealthService {
 }
 
 describe('HealthController', () => {
-    let app: FastifyInstance;
     let healthController: HealthController;
+    let mockRequest: Partial<FastifyRequest>;
+    let mockReply: Partial<FastifyReply>;
 
     beforeEach(() => {
-        app = fastify();
 
         const container = createTestContainer({
             healthService: MockHealthService,
             healthController: HealthController,
         });
-
         healthController = container.resolve<HealthController>('healthController');
-        app.get('/health', (req, reply) => healthController.checkHealth(req, reply));
+
+        mockRequest = {};
+        mockReply = {
+            send: jest.fn(), 
+        };
     });
 
     it('should return health status', async () => {
-        const response = await app.inject({
-            method: 'GET',
-            url: '/health',
-        });
-
-        expect(response.statusCode).toBe(200);
-        expect(response.json()).toEqual({ status: 'OK' });
+        await healthController.checkHealth(mockRequest as FastifyRequest, mockReply as FastifyReply);
+        expect(mockReply.send).toHaveBeenCalledWith({ status: 'OK' });
     });
-})
+});
