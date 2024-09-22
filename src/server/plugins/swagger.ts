@@ -4,15 +4,23 @@ import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
 async function swaggerGeneratorPlugin(fastify: FastifyInstance) {
-  await fastify.register(Swagger, {
+  await fastify.register(Swagger,  {
     openapi: {
-      openapi: '3.1.0',
       info: {
-        title: 'fastify-boilerplate',
-        description:
-          'The Swagger API documentation for the fastify-boilerplate project.',
+        title: 'User API',
+        description: 'API for user management',
         version: process.env.npm_package_version ?? '0.0.0',
       },
+      components: {
+        securitySchemes: {
+          apiKey: {
+            type: 'apiKey',
+            name: 'Authorization',
+            in: 'header',
+          },
+        },
+      },
+      security: [{ apiKey: [] }],
     },
   });
 

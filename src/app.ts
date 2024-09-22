@@ -1,6 +1,7 @@
 import { env } from '../src/config';
 import setupFastifyApp from './server/setup';
 import Fastify from 'fastify';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
 async function init() {
   const fastify = Fastify({
@@ -9,12 +10,7 @@ async function init() {
       redact: ['headers.authorization'],
     },
     ignoreDuplicateSlashes: true,
-    ajv: {
-      customOptions: {
-        keywords: ['example'],
-      },
-    },
-  });
+  }).withTypeProvider<TypeBoxTypeProvider>();
 
   await setupFastifyApp(fastify);
 

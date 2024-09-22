@@ -1,5 +1,3 @@
-
-import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { FastifyInstance } from 'fastify';
 import { env } from '../config';
 import AutoLoad from '@fastify/autoload';
@@ -51,5 +49,5 @@ export default async function setupFastifyApp(fastify: FastifyInstance) {
   // route registration
   await registerRoutes(fastify)
 
-  return fastify.withTypeProvider<TypeBoxTypeProvider>();
+  return fastify;
 }

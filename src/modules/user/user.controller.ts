@@ -1,15 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
+import { CreateUserBody } from './schemas/user-create.schema';
 
-export interface CreateUserInput {
-  name: string;
-  email: string;
-}
 
 export interface UpdateUserInput {
   name?: string;
   email?: string;
-}
+} //REMOVE
+
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -24,7 +22,7 @@ export class UserController {
   }
 
   async create(   
-    request: FastifyRequest<{ Body: CreateUserInput }>,
+    request: FastifyRequest<{ Body: CreateUserBody }>,
     reply: FastifyReply) {
     const user = await this.userService.create(request.body);
     reply.status(201).send(user);

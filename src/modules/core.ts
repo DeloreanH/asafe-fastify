@@ -12,6 +12,6 @@ export function coreModules() {
 }
 
 export async function registerRoutes(fastify: FastifyInstance) {
-  await fastify.register(healthRoutes, { prefix: '/health' });
+  await fastify.register(healthRoutes, { prefix: '/health'});
   await fastify.register(UserRoutes, { prefix: '/user' });
 }
