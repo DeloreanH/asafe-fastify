@@ -9,6 +9,7 @@ import path from 'path';
 import { fastifyAwilixPlugin } from '@fastify/awilix';
 import { asValue, createContainer, InjectionMode } from 'awilix';
 import { coreModules, registerRoutes } from '../modules/core';
+import { PrismaClient } from '@prisma/client';
 
 export default async function setupFastifyApp(fastify: FastifyInstance) {
 
@@ -35,7 +36,11 @@ export default async function setupFastifyApp(fastify: FastifyInstance) {
     injectionMode: InjectionMode.CLASSIC,
   });
 
+  // prisma singleton instantiation
+  const prisma = new PrismaClient();
+
   container.register({
+    prisma: asValue(prisma),
     ...coreModules(),
     logger: asValue(fastify.log),
   });

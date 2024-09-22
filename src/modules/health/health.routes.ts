@@ -4,5 +4,5 @@ import { HealthController } from './health.controller';
 export async function healthRoutes(fastify: FastifyInstance) {
   const healthController = fastify.diContainer.resolve<HealthController>('healthController');
   
-  fastify.get('/health', (req, reply) => healthController.checkHealth(req, reply));
+  fastify.get('/', (req, reply) => healthController.checkHealth(req, reply));
 }
