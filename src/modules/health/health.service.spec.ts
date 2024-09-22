@@ -35,23 +35,23 @@ describe('HealthService', () => {
     });
 
     it('should return "OK" for health status', () => {
-        const spy = jest.spyOn(healthService, 'getHealth').mockReturnValue('OK');
+        const spy = jest.spyOn(healthService, 'getHealth').mockReturnValue({status: 'OK'});
         const response = healthService.getHealth();
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(response).toBe('OK');
+        expect(response).toEqual({status: 'OK'});
     });
 
     it('should return health status as OK when database is healthy', async () => {
         prismaMock.$executeRaw.mockResolvedValueOnce(1);
         const response = await healthService.getDatabaseHealth();
         expect(prismaMock.$executeRaw).toHaveBeenCalledTimes(1);
-        expect(response).toBe('OK');
+        expect(response).toEqual({status: 'OK'});
     });
 
     it('should return health status as FAIL when database is down', async () => {
         prismaMock.$executeRaw.mockRejectedValueOnce(new Error('DB error'));
         const response = await healthService.getDatabaseHealth();
         expect(prismaMock.$executeRaw).toHaveBeenCalledTimes(1);
-        expect(response).toBe('FAIL');
+        expect(response).toEqual({status: 'FAIL'});
     });
 });

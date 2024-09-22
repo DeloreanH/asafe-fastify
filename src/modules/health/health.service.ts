@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
+import { HealthResponse } from "./schemas/health.schema";
 
 export class HealthService {
   constructor(private prisma: PrismaClient) { }
 
-  getHealth(): string {
-    return 'OK';
+  getHealth(): HealthResponse {
+    return { status: 'OK' };
   }
 
-  async getDatabaseHealth(): Promise<string> {
+  async getDatabaseHealth(): Promise<HealthResponse> {
     try {
       await this.prisma.$executeRaw`SELECT 1`;
-      return 'OK';
+      return { status: 'OK' };
     } catch (error) {
-      console.error('Database health check failed:', error);
-      return 'FAIL';
+      return { status: 'FAIL' };
     }
   }
 }

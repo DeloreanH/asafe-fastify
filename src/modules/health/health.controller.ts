@@ -6,11 +6,11 @@ export class HealthController {
 
   async getHealth(req: FastifyRequest, reply: FastifyReply) {
     const status = this.healthService.getHealth();
-    reply.send({ status });
+    reply.send(status);
   }
 
   async getDatabaseHealth(req: FastifyRequest, reply: FastifyReply) {
     const status = await this.healthService.getDatabaseHealth();
-    reply.send({ status });
+    reply.send(status);
   }
 }

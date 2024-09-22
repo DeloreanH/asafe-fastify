@@ -51,21 +51,21 @@ describe('HealthController', () => {
     });
 
     it('should return health status', () => {
-        const spy = jest.spyOn(healthService, 'getHealth').mockReturnValue('OK');
+        const spy = jest.spyOn(healthService, 'getHealth').mockReturnValue({ status: 'OK' });
         healthController.getHealth(mockRequest as FastifyRequest, mockReply as FastifyReply);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(mockReply.send).toHaveBeenCalledWith({ status: 'OK' });
     });
 
     it('should return health status as OK when database is healthy', async () => {
-        const spy = jest.spyOn(healthService, 'getDatabaseHealth').mockResolvedValueOnce('OK')
+        const spy = jest.spyOn(healthService, 'getDatabaseHealth').mockResolvedValueOnce({ status: 'OK' })
         await healthController.getDatabaseHealth(mockRequest as FastifyRequest, mockReply as FastifyReply);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(mockReply.send).toHaveBeenCalledWith({ status: 'OK' });
     });
 
     it('should return health status as FAIL when database is down', async () => {
-        const spy = jest.spyOn(healthService, 'getDatabaseHealth').mockResolvedValueOnce('FAIL');
+        const spy = jest.spyOn(healthService, 'getDatabaseHealth').mockResolvedValueOnce({ status: 'FAIL' });
         await healthController.getDatabaseHealth(mockRequest as FastifyRequest, mockReply as FastifyReply);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(mockReply.send).toHaveBeenCalledWith({ status: 'FAIL' });
