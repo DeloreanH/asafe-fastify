@@ -1,13 +1,15 @@
 import { FastifyInstance } from 'fastify';
 import { env } from '../config';
+import { prisma } from './prisma/client';
+import { fastifyAwilixPlugin } from '@fastify/awilix';
+import { asValue, createContainer, InjectionMode } from 'awilix';
+import { coreModules, registerRoutes } from '../modules/core';
 import AutoLoad from '@fastify/autoload';
 import Cors from '@fastify/cors';
 import Helmet from '@fastify/helmet';
 import path from 'path';
-import { fastifyAwilixPlugin } from '@fastify/awilix';
-import { asValue, createContainer, InjectionMode } from 'awilix';
-import { coreModules, registerRoutes } from '../modules/core';
-import { prisma } from './prisma/client';
+import fastifyJWT from 'fastify-jwt';
+
 
 export default async function setupFastifyApp(fastify: FastifyInstance) {
 
@@ -29,11 +31,15 @@ export default async function setupFastifyApp(fastify: FastifyInstance) {
     dirNameRoutePrefix: false,
   });
 
+  // fastify jwt
+  fastify.register(fastifyJWT, {
+    secret: env.jwt.secret,
+  });
+
   // di injection
   const container = createContainer({
     injectionMode: InjectionMode.CLASSIC,
   });
-
 
   container.register({
     prisma: asValue(prisma),

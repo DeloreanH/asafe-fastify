@@ -4,7 +4,7 @@ import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
 async function swaggerGeneratorPlugin(fastify: FastifyInstance) {
-  await fastify.register(Swagger,  {
+  await fastify.register(Swagger, {
     openapi: {
       info: {
         title: 'User API',
@@ -13,14 +13,15 @@ async function swaggerGeneratorPlugin(fastify: FastifyInstance) {
       },
       components: {
         securitySchemes: {
-          apiKey: {
-            type: 'apiKey',
-            name: 'Authorization',
-            in: 'header',
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+            description: 'Enter your bearer token',
           },
         },
       },
-      security: [{ apiKey: [] }],
+      security: [{ bearerAuth: [], }],
     },
   });
 
