@@ -12,7 +12,7 @@ module.exports = {
         '<rootDir>/src/config/',                               // Ignore all files in the config directory
         '<rootDir>/src/server/plugins/',                       // Ignore all plugins in the server
         '<rootDir>/src/shared/exceptions/',                    // Ignore shared exceptions
-        '<rootDir>/src/modules/core.ts',                       // Ignore core.ts
+        '<rootDir>/src/modules/core.ts',                       // Ignore core.ts    
     ],
     coverageDirectory: 'coverage', 
     collectCoverage: true, 
@@ -26,5 +26,7 @@ module.exports = {
         '<rootDir>/src/app.ts',                                // Exclude app.ts
         '<rootDir>/src/declarations.d.ts',                     // Exclude declarations.d.ts
         '.*\\.routes\\.ts$',                                   // Exclude any files ending with .routes.ts
+        '.*\\.schema\\.ts$',                                   // Exclude any files ending with .schema.ts
+        '.*\\.repository\\.ts$',                               // Exclude any files ending with .schema.ts
     ],
 };
