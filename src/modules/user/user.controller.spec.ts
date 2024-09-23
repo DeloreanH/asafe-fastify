@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserBody } from './schemas/user-update.schema';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { WebSocketService } from '../websocket/websocket.service';
+import { MultipartFile } from '@fastify/multipart';
 
 describe('UserController', () => {
     let userController: UserController;
@@ -61,8 +62,9 @@ describe('UserController', () => {
                 uuid: uuidv4(),
                 name: 'John Doe',
                 email: 'john@doe.com',
-                password: 'hashed_password',
+                password: 'hashed_password', // this is remove on serialization later in the cycle of the response (CreateUserResponseSchema)
                 role: PrismaRole.BASIC,
+                avatar: null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }];
@@ -84,8 +86,9 @@ describe('UserController', () => {
                 uuid,
                 name: 'John Doe',
                 email: 'john@doe.com',
-                password: 'hashed_password',
+                password: 'hashed_password', // this is remove on serialization later in the cycle of the response (CreateUserResponseSchema)
                 role: PrismaRole.BASIC,
+                avatar: null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -111,6 +114,7 @@ describe('UserController', () => {
                 ...userData,
                 password: 'hashed_password',
                 role: PrismaRole.BASIC,
+                avatar: null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -137,6 +141,7 @@ describe('UserController', () => {
                 email: 'john@doe.com',
                 password: 'hashed_password',
                 role: PrismaRole.BASIC,
+                avatar: null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -171,4 +176,59 @@ describe('UserController', () => {
             expect(mockReply.send).toHaveBeenCalled();
         });
     });
+
+    describe('updateAvatar', () => {
+        it('should update the user avatar and return the updated user', async () => {
+            const uuid = uuidv4();
+            const mockFile: MultipartFile = {
+                filename: 'avatar.png',
+                mimetype: 'image/png',
+                file: {
+                    pipe: jest.fn(), // Mocking the pipe method
+                },
+            } as unknown as MultipartFile;
+
+            mockRequest.file = jest.fn().mockResolvedValue(mockFile); // Mocking the file method
+
+            const fileUrl = 'https://storage.googleapis.com/bucket/avatar.png';
+            userService.updateAvatar = jest.fn().mockResolvedValue({
+                id: 1,
+                uuid,
+                avatar: fileUrl,
+            });
+
+            mockRequest.params = { uuid };
+
+            await userController.updateAvatar(mockRequest as FastifyRequest, mockReply as FastifyReply);
+
+            expect(userService.updateAvatar).toHaveBeenCalledWith(uuid, mockFile);
+            expect(mockReply.send).toHaveBeenCalledWith({ id: 1, uuid, avatar: fileUrl });
+        });
+
+        it('should return an error if file upload fails', async () => {
+            const uuid = uuidv4();
+            const mockFile: MultipartFile = {
+                filename: 'avatar.png',
+                mimetype: 'image/png',
+                file: {
+                    pipe: jest.fn(), // Mocking the pipe method
+                },
+            } as unknown as MultipartFile;
+
+            mockRequest.file = jest.fn().mockResolvedValue(mockFile); // Mocking the file method
+
+            const uploadError = new Error('Upload failed');
+            userService.updateAvatar = jest.fn().mockRejectedValue(uploadError);
+
+            mockRequest.params = { uuid };
+
+            await userController.updateAvatar(mockRequest as FastifyRequest, mockReply as FastifyReply);
+
+            expect(userService.updateAvatar).toHaveBeenCalledWith(uuid, mockFile);
+            expect(mockReply.status).toHaveBeenCalledWith(500);
+            expect(mockReply.send).toHaveBeenCalledWith({ error: 'Upload failed' });
+        });
+    });
+
+
 });

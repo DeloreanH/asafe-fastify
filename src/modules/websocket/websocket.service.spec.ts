@@ -102,6 +102,7 @@ describe('WebSocketService', () => {
         uuid: uuidv4(),
         name: 'new John Name',
         email: 'john@doe.com',
+        avatar: null,
         role: PrismaRole.BASIC,
       };
 
