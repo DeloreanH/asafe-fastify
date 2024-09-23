@@ -4,5 +4,6 @@ export interface FastifySwaggerSchema extends FastifySchema {
     tags?: string[];
     summary?: string;
     description?: string;
+    consumes?: string[];
   }
   
