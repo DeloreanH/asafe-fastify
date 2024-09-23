@@ -16,7 +16,6 @@ describe('HealthService', () => {
     let container;
     let healthService: HealthService;
 
-
     beforeEach(() => {
         jest.clearAllMocks();
 
@@ -24,14 +23,12 @@ describe('HealthService', () => {
             injectionMode: InjectionMode.CLASSIC,
         });
 
-
         container.register({
             prisma: asValue(prismaMock),
             healthService: asClass(HealthService),
         });
 
         healthService = container.resolve<HealthService>('healthService');
-
     });
 
     it('should return "OK" for health status', () => {

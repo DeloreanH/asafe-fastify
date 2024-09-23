@@ -3,7 +3,8 @@ module.exports = {
     testEnvironment: 'node', 
     moduleFileExtensions: ['ts', 'js'],
     testMatch: [
-        '**/modules/**/*(*.spec|*.test).[jt]s?(x)',            // Match only test files (ending in .spec or .test)
+        '**/modules/**/*(*.spec|*.test).[jt]s?(x)',
+        '**/hooks/**/*(*.spec|*.test).[jt]s?(x)',                 // Match only test files (ending in .spec or .test)
     ],
     testPathIgnorePatterns: [
         '<rootDir>/src/server/',                               // Ignore all files in the server directory
