@@ -1,10 +1,12 @@
 import { ConflictException, UnauthorizedException } from '../../shared/exceptions';
 import { LoginBody, LoginResponse } from './schemas/login.schema';
 import { signUpBody, signUpResponse } from './schemas/signup.schema';
-import { env } from '../../config';
 import { UserRepository } from '../user/user.repository';
+import { env } from '../../config';
+import { User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+
 
 export class AuthService {
   constructor(private userRepository: UserRepository) { }
@@ -58,9 +60,9 @@ export class AuthService {
     };
   }
 
-  private jwtSign(user: any) {
+  private jwtSign(user: User) {
     const expiresIn = env.jwt.expiresIn;
-    const token = jwt.sign({ id: user.id, role: user.role }, env.jwt.secret, { expiresIn });
+    const token = jwt.sign({ id: user.id, uuid: user.uuid, role: user.role }, env.jwt.secret, { expiresIn });
     return { token, expiresIn };
   }
 }

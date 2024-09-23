@@ -10,7 +10,6 @@ import Helmet from '@fastify/helmet';
 import path from 'path';
 import fastifyJWT from 'fastify-jwt';
 
-
 export default async function setupFastifyApp(fastify: FastifyInstance) {
 
   // helmet

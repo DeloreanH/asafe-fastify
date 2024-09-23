@@ -3,7 +3,6 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { ForbiddenException } from '../shared/exceptions';
 import { Role as PrismaRole } from '@prisma/client';
 
-
 export enum Permission {
   ReadAll = 'read:all',
   WriteAll = 'write:all',

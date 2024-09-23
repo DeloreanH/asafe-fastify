@@ -3,7 +3,6 @@ import { UserRepository } from './user.repository';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { ConflictException } from '../../shared/exceptions';
 import { UpdateUserBody } from './schemas/user-update.schema';
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 
 export class UserService {
