@@ -12,7 +12,7 @@ import { FastifySwaggerSchema } from '../../types/fastify-swagger.type';
 export async function UserRoutes(fastify: FastifyInstance) {
   const userController = fastify.diContainer.resolve<UserController>('userController');
 
-  fastify.post<{ Body: CreateUserBody }>('/', {
+  fastify.post<{ Body: CreateUserBody }>('', {
     preValidation: [authHook, roleHook([Permission.WriteAll])],
     schema: {
       body: createUserBodySchema,
@@ -26,7 +26,7 @@ export async function UserRoutes(fastify: FastifyInstance) {
     return userController.create(req, reply);
   });
 
-  fastify.get('/', {
+  fastify.get('', {
     preValidation: [authHook, roleHook([Permission.WriteAll])],
     schema: {
       response: {
