@@ -8,6 +8,7 @@ describe('roleHook', () => {
   let reply: FastifyReply;
 
   beforeEach(() => {
+    jest.clearAllMocks();
     req = {
       user: {
         role: PrismaRole.BASIC,

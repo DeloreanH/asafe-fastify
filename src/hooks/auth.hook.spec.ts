@@ -9,6 +9,7 @@ describe('authHook', () => {
     let reply: FastifyReply;
 
     beforeEach(() => {
+        jest.clearAllMocks();
         reply = {} as FastifyReply;
     });
 

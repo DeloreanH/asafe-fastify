@@ -11,12 +11,12 @@ export class UserController {
 
   async findAll(request: FastifyRequest, reply: FastifyReply) {
     const users = await this.userService.findAll();
-    reply.send(users);
+    reply.status(200).send(users);
   }
 
   async findByUid(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
     const user = await this.userService.findByUid(request.params.uuid);
-    reply.send(user);
+    reply.status(200).send(user);
   }
 
   async create(
@@ -32,11 +32,17 @@ export class UserController {
   ) {
     const user = await this.userService.update(request.params.uuid, request.body);
     this.webSocketService.emitUserUpdate(user);
-    reply.send(user);
+    reply.status(200).send(user);
   }
 
   async delete(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
     await this.userService.delete(request.params.uuid);
     reply.status(204).send();
+  }
+
+  async updateAvatar(request: FastifyRequest, reply: FastifyReply) {
+    const avatarFile = await request.file();
+    const user = await this.userService.updateAvatar((request.user as {uuid: string}).uuid, avatarFile);
+    reply.status(200).send(user);
   }
 }

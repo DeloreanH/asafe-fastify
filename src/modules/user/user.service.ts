@@ -3,10 +3,11 @@ import { UserRepository } from './user.repository';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { ConflictException } from '../../shared/exceptions';
 import { UpdateUserBody } from './schemas/user-update.schema';
+import { FileUploadService } from '../file-upload/file-upload.service';
 import bcrypt from 'bcrypt';
 
 export class UserService {
-  constructor(private userRepository: UserRepository) { }
+  constructor(private userRepository: UserRepository, private fileUploadService: FileUploadService) { }
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
@@ -39,5 +40,10 @@ export class UserService {
 
   async delete(uuid: string): Promise<User> {
     return this.userRepository.delete(uuid);
+  }
+
+  async updateAvatar(uuid: string, file: any) {
+    const fileUrl = await this.fileUploadService.uploadFile(file, uuid);
+    return await this.userRepository.update(uuid, { avatar: fileUrl });
   }
 }

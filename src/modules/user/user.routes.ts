@@ -8,6 +8,7 @@ import { findUserSchema } from './schemas/find-user.schema';
 import { uIdParamsSchema } from '../../schemas/id-param.schema';
 import { authHook } from '../../hooks/auth.hook';
 import { FastifySwaggerSchema } from '../../types/fastify-swagger.type';
+import { mimeTypeHook } from '../../hooks/mimetype.hook';
 
 export async function UserRoutes(fastify: FastifyInstance) {
   const userController = fastify.diContainer.resolve<UserController>('userController');
@@ -78,5 +79,12 @@ export async function UserRoutes(fastify: FastifyInstance) {
     } as FastifySwaggerSchema,
   }, async (req: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) => {
     return await userController.delete(req, reply);
+  });
+
+  fastify.patch('/avatar',{
+    preValidation: [authHook, mimeTypeHook],
+  }, async (req, reply) => {
+    const result = await userController.updateAvatar(req, reply);
+    reply.send(result);
   });
 }
