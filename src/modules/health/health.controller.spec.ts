@@ -6,12 +6,10 @@ import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { prisma } from '../../server/prisma/client';
 import { HealthService } from './health.service';
 
-jest.mock('../../server/prisma/client', () => {
-    return {
-        __esModule: true,
-        prisma: mockDeep<PrismaClient>(),
-    };
-});
+jest.mock('../../server/prisma/client', () => ({
+    __esModule: true,
+    prisma: mockDeep<PrismaClient>(),
+}));
 
 export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
 
