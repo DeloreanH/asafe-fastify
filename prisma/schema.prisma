@@ -23,9 +23,21 @@ model User {
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Post      Post[]
 }
 
 enum Role {
   BASIC
   ADMIN
 }
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique @default(uuid())
+  text      String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
