@@ -25,6 +25,7 @@ const schema = Type.Object({
   PORT: Type.Number({ default: 3000 }),
   JWT_SECRET: Type.String(),
   JWT_EXPIRE_TIME: Type.Number({ default: 3600 }),
+  BUCKET_NAME: Type.String({ default: 'fasty-avatar' }),
 });
 
 const env = envSchema<Static<typeof schema>>({
@@ -50,5 +51,9 @@ export default {
   jwt: {
     secret: env.JWT_SECRET,
     expiresIn: env.JWT_EXPIRE_TIME
+  },
+  gcc:{
+    svc: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    bucketName: env.BUCKET_NAME
   }
 };

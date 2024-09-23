@@ -7,6 +7,7 @@ import { authRoutes } from './auth/auth.routes';
 import { AuthModule } from './auth/auth.module';
 import { websocketRoutes } from './websocket/websocket.routes';
 import { websocketModule } from './websocket/websocket.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 export function coreModules() {
   return {
@@ -15,6 +16,7 @@ export function coreModules() {
     ...userModule,
     ...AuthModule,
     ...websocketModule,
+    ...FileUploadModule
   };
 }
 
