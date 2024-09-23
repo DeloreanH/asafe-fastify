@@ -4,7 +4,7 @@ export const postFindSchema = Type.Object({
   id: Type.Number(),
   uuid: Type.String(),
   text: Type.String(),
-  authorId: Type.Number(),
+  authorUid: Type.String(),
 });
 
 export type FindPostResponse = Static<typeof postFindSchema>;

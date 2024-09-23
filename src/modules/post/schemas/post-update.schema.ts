@@ -10,7 +10,7 @@ export const updatePostResponseSchema = Type.Object({
     id: Type.Number(),
     uuid: Type.String(),
     text: Type.String(),
-    authorId: Type.Number(),
+    authorUid: Type.String(),
 });
 
 export type UpdatePostResponse = Static<typeof updatePostResponseSchema>;

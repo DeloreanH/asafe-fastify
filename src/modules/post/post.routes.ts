@@ -13,7 +13,7 @@ export async function PostRoutes(fastify: FastifyInstance) {
   const postController = fastify.diContainer.resolve<PostController>('postController');
 
   fastify.post<{ Body: CreatePostBody }>('', {
-    preValidation: [authHook, roleHook([Permission.WriteOwn])],
+    preValidation: [authHook, roleHook([Permission.WriteOwn, Permission.WriteAll])],
     schema: {
       body: createPostBodySchema,
       response: {

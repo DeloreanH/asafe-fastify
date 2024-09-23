@@ -9,14 +9,14 @@ export class PostRepository {
     return this.prisma.post.findMany();
   }
 
-  async findByUUID(uuid: string): Promise<Post | null> {
+  async findByUid(uuid: string): Promise<Post | null> {
     return this.prisma.post.findUnique({ where: { uuid } });
   }
 
-  async create(data: CreatePostBody, authorId: number): Promise<Post> {
+  async create(data: CreatePostBody, authorUid: string): Promise<Post> {
     return this.prisma.post.create({ data: {
       ...data,
-      authorId,
+      authorUid,
     }});
   }
 

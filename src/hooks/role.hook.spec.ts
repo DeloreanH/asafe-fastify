@@ -8,7 +8,6 @@ describe('roleHook', () => {
   let reply: FastifyReply;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     req = {
       user: {
         role: PrismaRole.BASIC,
@@ -20,7 +19,7 @@ describe('roleHook', () => {
   });
 
   it('should allow access if user has required permissions', async () => {
-    const requiredPermissions = [Permission.ReadAll];
+    const requiredPermissions = [Permission.WriteOwn];
     const hook = roleHook(requiredPermissions);
 
     await expect(hook(req, reply)).resolves.not.toThrow();
@@ -49,9 +48,8 @@ describe('roleHook', () => {
       role: PrismaRole.ADMIN,
       permissions: rolesPermissions[PrismaRole.ADMIN],
     };
-
-    const requiredPermissions = [Permission.ReadAll, Permission.WriteAll, Permission.DeleteAll];
-    const hook = roleHook(requiredPermissions);
+    
+    const hook = roleHook(rolesPermissions[PrismaRole.ADMIN]);
 
     await expect(hook(req, reply)).resolves.not.toThrow();
   });

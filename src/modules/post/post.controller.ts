@@ -12,15 +12,15 @@ export class PostController {
   }
 
   async findByUid(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
-    const user = await this.postService.findByUUID(request.params.uuid);
+    const user = await this.postService.findByUid(request.params.uuid);
     reply.send(user);
   }
 
   async create(
     request: FastifyRequest<{ Body: CreatePostBody; }>,
     reply: FastifyReply) {
-    const authorId = (request.user as {id: number} ).id;
-    const post = await this.postService.create(request.body, authorId);
+    const authorUid = (request.user as {uuid: string} ).uuid;
+    const post = await this.postService.create(request.body, authorUid);
     reply.status(201).send(post);
   }
 

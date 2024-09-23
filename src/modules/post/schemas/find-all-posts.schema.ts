@@ -5,7 +5,7 @@ export const findAllPostsSchema = Type.Array(
     id: Type.Number(),
     uuid: Type.String(),
     text: Type.String(),
-    authorId: Type.Number(),
+    authorUid: Type.String(),
   })
 );
 
