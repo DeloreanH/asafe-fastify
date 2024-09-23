@@ -27,7 +27,7 @@ export async function PostRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get('', {
-    preValidation: [authHook, roleHook([Permission.ReadOwn])],
+    preValidation: [authHook, roleHook([Permission.ReadOwn, Permission.WriteAll])],
     schema: {
       response: {
         200: findAllPostsSchema,
@@ -40,7 +40,7 @@ export async function PostRoutes(fastify: FastifyInstance) {
   });
 
   fastify.get<{ Params: { uuid: string } }>('/:uuid', {
-    preValidation: [authHook, roleHook([Permission.ReadOwn])],
+    preValidation: [authHook, roleHook([Permission.ReadOwn, Permission.ReadAll])],
     schema: {
       params: uIdParamsSchema,
       response: { 200: postFindSchema },
@@ -52,7 +52,7 @@ export async function PostRoutes(fastify: FastifyInstance) {
   });
 
   fastify.patch<{ Params: { uuid: string }; Body: UpdatePostBody }>('/:uuid', {
-    preValidation: [authHook, roleHook([Permission.WriteOwn])],
+    preValidation: [authHook, roleHook([Permission.WriteOwn, Permission.WriteAll])],
     schema: {
       params: uIdParamsSchema,
       body: updatePostBodySchema,
@@ -65,7 +65,7 @@ export async function PostRoutes(fastify: FastifyInstance) {
   });
 
   fastify.delete<{ Params: { uuid: string } }>('/:uuid', {
-    preValidation: [authHook, roleHook([Permission.DeleteOwn])],
+    preValidation: [authHook, roleHook([Permission.ReadAll])],
     schema: {
       params: uIdParamsSchema,
       response: {
