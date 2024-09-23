@@ -4,8 +4,13 @@ import fp from 'fastify-plugin';
 async function multipartPlugin(fastify: FastifyInstance) {
   fastify.register(require('@fastify/multipart'), {
     limits: {
-      fileSize: 50 * 1024 * 1024, // Max file size in bytes (50 MB)
-      files: 1,                 // Max number of file fields
+      fieldNameSize: 100,
+      fieldSize: 100,
+      fields: 10,
+      fileSize: 10485760 ,  // Max file size
+      files: 1,           // Max number of files
+      headerPairs: 2000,
+      parts: 1000
     }
   });
   fastify.log.info('Multipart support enabled');

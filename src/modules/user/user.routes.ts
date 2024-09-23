@@ -81,8 +81,24 @@ export async function UserRoutes(fastify: FastifyInstance) {
     return await userController.delete(req, reply);
   });
 
+  // This endpoint allows users to update their avatar by uploading a new image file.
+    // Ensure to include authentication in the request as specified by the preValidation hook.
+
+    // There is a conflict between the Fastify Swagger implementation and Fastify Multipart handling.
+    // When the Swagger annotations are set for this route, it may trigger validation errors 
+    // even when the proper data is provided through a file upload.
+    //
+    // To test this endpoint correctly:
+    // 1. Use Postman and set the request body type to "form-data".
+    // 2. Ensure you include the file in the "avatar" field.
+    // 3. Refer to the README.md for additional instructions on how to configure the request.
   fastify.patch('/avatar',{
-    preValidation: [authHook, mimeTypeHook],
+    preValidation: [authHook],
+    schema:{
+      response: { 200: updateUserResponseSchema },
+      tags: ['User'],
+      description: 'USE POSTMAN - see readme.md',
+    }
   }, async (req, reply) => {
     const result = await userController.updateAvatar(req, reply);
     reply.send(result);
