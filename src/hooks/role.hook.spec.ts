@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ForbiddenException } from '../shared/exceptions';
-import { roleHook, Role, Permission, rolesPermissions } from './role.hook';
+import { roleHook, Permission, rolesPermissions } from './role.hook';
+import { Role as PrismaRole } from '@prisma/client';
 
 describe('roleHook', () => {
   let req: FastifyRequest;
@@ -9,8 +10,8 @@ describe('roleHook', () => {
   beforeEach(() => {
     req = {
       user: {
-        role: Role.Regular,
-        permissions: rolesPermissions[Role.Regular],
+        role: PrismaRole.BASIC,
+        permissions: rolesPermissions[PrismaRole.BASIC],
       },
     } as FastifyRequest;
 
@@ -44,8 +45,8 @@ describe('roleHook', () => {
 
   it('should allow access if user is admin and has all permissions', async () => {
     req.user = {
-      role: Role.Admin,
-      permissions: rolesPermissions[Role.Admin],
+      role: PrismaRole.ADMIN,
+      permissions: rolesPermissions[PrismaRole.ADMIN],
     };
 
     const requiredPermissions = [Permission.ReadAll, Permission.WriteAll, Permission.DeleteAll];
