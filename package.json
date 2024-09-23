@@ -10,7 +10,10 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:reset": "prisma migrate reset",
-    "migrate:status": "prisma migrate status"
+    "migrate:status": "prisma migrate status",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "prisma:format": "prisma format"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +29,7 @@
     "@fastify/swagger": "^9.0.0",
     "@fastify/swagger-ui": "^5.0.1",
     "@fastify/type-provider-typebox": "^5.0.0",
+    "@fastify/websocket": "^11.0.1",
     "@prisma/client": "^5.19.1",
     "@sinclair/typebox": "^0.33.12",
     "bcrypt": "^5.1.1",
