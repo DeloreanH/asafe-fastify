@@ -59,7 +59,7 @@ export async function UserRoutes(fastify: FastifyInstance) {
       response: { 200: updateUserResponseSchema },
       tags: ['User'],
       description: 'Update user by UUID',
-    } as FastifySwaggerSchema,,
+    } as FastifySwaggerSchema,
   }, async (req: FastifyRequest<{ Params: { uuid: string }; Body: UpdateUserBody }>, reply: FastifyReply) => {
     return userController.update(req, reply);
   });
