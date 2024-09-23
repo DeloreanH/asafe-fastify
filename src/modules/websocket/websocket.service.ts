@@ -1,4 +1,7 @@
 import { WebSocket } from 'ws';
+import { updateUserResponseSchema } from '../user/schemas/user-update.schema';
+import { Value } from '@sinclair/typebox/value'
+import { User } from '@prisma/client';
 
 export class WebSocketService {
   private activeConnections: WebSocket[] = [];
@@ -11,7 +14,6 @@ export class WebSocketService {
       this.removeConnection(socket);
     });
   }
-
 
   private removeConnection(socket: WebSocket) {
     const index = this.activeConnections.indexOf(socket);
@@ -30,8 +32,13 @@ export class WebSocketService {
   }
 
   // Emit user update event
-  emitUserUpdate(updatedUser: any) {
-    const message = JSON.stringify({ event: 'userUpdated', data: updatedUser });
+  emitUserUpdate(user: User) {
+    const cleanedUser = Value.Clean(updateUserResponseSchema, user);
+    const message = JSON.stringify({ event: 'userUpdated', data: cleanedUser });
     this.sendToAll(message);
+  }
+
+  getActiveConnections() {
+    return this.activeConnections;
   }
 }

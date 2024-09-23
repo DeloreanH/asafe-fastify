@@ -6,10 +6,12 @@ import { Role as PrismaRole } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserBody } from './schemas/user-update.schema';
 import { CreateUserBody } from './schemas/user-create.schema';
+import { WebSocketService } from '../websocket/websocket.service';
 
 describe('UserController', () => {
     let userController: UserController;
     let userService: jest.Mocked<UserService>;
+    let webSocketService: jest.Mocked<WebSocketService>;
     let mockRequest: FastifyRequest;
     let mockReply: FastifyReply;
 
@@ -25,12 +27,17 @@ describe('UserController', () => {
             delete: jest.fn()
         } as unknown as jest.Mocked<UserService>;
 
+        webSocketService = {
+            emitUserUpdate: jest.fn(),
+        } as unknown as jest.Mocked<WebSocketService>;
+
         const container = createContainer({
             injectionMode: InjectionMode.CLASSIC,
         });
 
         container.register({
             userService: asValue(userService),
+            webSocketService: asValue(webSocketService),
             userController: asClass(UserController),
         });
 
@@ -141,6 +148,13 @@ describe('UserController', () => {
             await userController.update(mockRequest as FastifyRequest<{ Params: { uuid: string }; Body: UpdateUserBody }>, mockReply as FastifyReply);
 
             expect(userService.update).toHaveBeenCalledWith(uuid, userData);
+            expect(webSocketService.emitUserUpdate).toHaveBeenCalledWith(expect.objectContaining({
+                id: mockUser.id,
+                uuid: mockUser.uuid,
+                name: mockUser.name,
+                email: mockUser.email,
+                role: mockUser.role,
+            }));
             expect(mockReply.send).toHaveBeenCalledWith(mockUser);
         });
     });
