@@ -4,7 +4,6 @@ import { CreateUserBody } from './schemas/user-create.schema';
 import { UpdateUserBody } from './schemas/user-update.schema';
 import { WebSocketService } from '../websocket/websocket.service';
 
-
 export class UserController {
   constructor(
     private userService: UserService,

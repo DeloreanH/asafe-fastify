@@ -1,7 +1,7 @@
 import { env } from '../src/config';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import setupFastifyApp from './server/setup';
 import Fastify from 'fastify';
-import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
 async function init() {
   const fastify = Fastify({

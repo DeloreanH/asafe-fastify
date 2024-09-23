@@ -21,5 +21,4 @@ export abstract class ExceptionBase extends Error {
     super(message);
     Error.captureStackTrace(this, this.constructor);
   }
-  
 }

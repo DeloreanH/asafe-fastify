@@ -4,7 +4,6 @@ import { createContainer, asClass, InjectionMode } from 'awilix';
 import { Role as PrismaRole } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
-
 // Extend the WebSocket type to include closeCallback
 interface MockedWebSocket extends WebSocket {
   closeCallback?: () => void;
