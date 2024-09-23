@@ -16,7 +16,7 @@ export class AuthController {
   async signup(
     request: FastifyRequest<{ Body: signUpBody }>,
     reply: FastifyReply) {
-    const signedUp = await this.authService.login(request.body);
+    const signedUp = await this.authService.signup(request.body);
     reply.send(signedUp);
   }
 }
