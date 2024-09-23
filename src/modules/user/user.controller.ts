@@ -2,9 +2,13 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { UpdateUserBody } from './schemas/user-update.schema';
+import { WebSocketService } from '../websocket/websocket.service';
+
 
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private webSocketService: WebSocketService) { }
 
   async findAll(request: FastifyRequest, reply: FastifyReply) {
     const users = await this.userService.findAll();
@@ -28,6 +32,7 @@ export class UserController {
     reply: FastifyReply
   ) {
     const user = await this.userService.update(request.params.uuid, request.body);
+    this.webSocketService.emitUserUpdate(user);
     reply.send(user);
   }
 
