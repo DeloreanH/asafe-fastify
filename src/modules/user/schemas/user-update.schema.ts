@@ -6,7 +6,7 @@ export const updateUserBodySchema = Type.Optional(Type.Object({
     role: Type.Optional(Type.Enum(Role)),
 }));
 
-export type updateUserBody = Static<typeof updateUserBodySchema>;
+export type UpdateUserBody = Static<typeof updateUserBodySchema>;
 
 export const updateUserResponseSchema = Type.Object({
     id: Type.Number(),
@@ -15,4 +15,4 @@ export const updateUserResponseSchema = Type.Object({
     role: Type.String(),
 });
 
-export type updateUserResponse = Static<typeof updateUserResponseSchema>;
+export type UpdateUserResponse = Static<typeof updateUserResponseSchema>;

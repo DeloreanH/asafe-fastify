@@ -1,11 +1,11 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { CreateUserBody, createUserBodySchema, CreateUserResponseSchema } from './schemas/user-create.schema';
-import { updateUserBody, updateUserBodySchema, updateUserResponseSchema } from './schemas/user-update.schema';
+import { UpdateUserBody, updateUserBodySchema, updateUserResponseSchema } from './schemas/user-update.schema';
 import { UserController } from './user.controller';
 import { Permission, roleHook } from '../../hooks/role.hook';
 import { findAllUserSchema } from './schemas/find-all-users.schema';
 import { findUserSchema } from './schemas/find-user.schema';
-import { idParamsSchema } from '../../schemas/id-param.schema';
+import { uIdParamsSchema } from '../../schemas/id-param.schema';
 import { authHook } from '../../hooks/auth.hook';
 
 export async function UserRoutes(fastify: FastifyInstance) {
@@ -38,44 +38,44 @@ export async function UserRoutes(fastify: FastifyInstance) {
     return userController.findAll(req, reply);
   });
 
-  fastify.get<{ Params: { id: number } }>('/users/:id', {
+  fastify.get<{ Params: { uuid: string } }>('/users/:uuid', {
     preValidation: [authHook, roleHook([Permission.ReadAll])],
     schema: {
-      params: idParamsSchema,
+      params: uIdParamsSchema,
       response: { 200: findUserSchema },
       tags: ['User'],
-      description: 'Get user by ID',
+      description: 'Get user by UUID',
     },
-  }, async (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) => {
-    return userController.findById(req, reply);
+  }, async (req: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) => {
+    return userController.findByUid(req, reply);
   });
 
-  fastify.patch<{ Params: { id: number }; Body: updateUserBody }>('/users/:id', {
+  fastify.patch<{ Params: { uuid: string }; Body: UpdateUserBody }>('/users/:uuid', {
     preValidation: [authHook, roleHook([Permission.WriteAll])],
     schema: {
-      params: idParamsSchema,
+      params: uIdParamsSchema,
       body: updateUserBodySchema,
       response: { 200: updateUserResponseSchema },
       tags: ['User'],
-      description: 'Update user by ID',
+      description: 'Update user by UUID',
     },
-  }, async (req: FastifyRequest<{ Params: { id: number }; Body: updateUserBody }>, reply: FastifyReply) => {
+  }, async (req: FastifyRequest<{ Params: { uuid: string }; Body: UpdateUserBody }>, reply: FastifyReply) => {
     return userController.update(req, reply);
   });
 
-  fastify.delete<{ Params: { id: number } }>('/users/:id', {
+  fastify.delete<{ Params: { uuid: string } }>('/users/:uuid', {
     preValidation: [authHook, roleHook([Permission.DeleteAll])],
     schema: {
-      params: idParamsSchema,
+      params: uIdParamsSchema,
       response: {
         204: {
           description: 'User deleted',
         },
       },
       tags: ['User'],
-      description: 'Delete user by ID',
+      description: 'Delete user by UUID',
     },
-  }, async (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) => {
+  }, async (req: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) => {
     return await userController.delete(req, reply);
   });
 }

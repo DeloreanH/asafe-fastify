@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { UserRepository } from '../user/user.repository';
 import { ConflictException, UnauthorizedException } from '../../shared/exceptions';
 import { Role as PrismaRole } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -53,6 +54,7 @@ describe('AuthService', () => {
                 name: "John Doe",
                 email: "john@doe.com",
                 password: "123password",
+                uuid: uuidv4(),
                 role: PrismaRole.BASIC,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -73,6 +75,7 @@ describe('AuthService', () => {
                 name: "John Doe",
                 email: "john@doe.com",
                 password: "123password",
+                uuid: uuidv4(),
                 role: PrismaRole.BASIC,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -99,6 +102,7 @@ describe('AuthService', () => {
                 name: "John Doe",
                 email: "john@doe.com",
                 password: "123password",
+                uuid: uuidv4(),
                 role: PrismaRole.BASIC,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -124,6 +128,7 @@ describe('AuthService', () => {
                 name: "John Doe",
                 email: "john@doe.com",
                 password: '123password',
+                uuid: uuidv4(),
                 role: PrismaRole.BASIC,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -141,6 +146,7 @@ describe('AuthService', () => {
             expect(result).toEqual({
                 user: {
                     id: 1,
+                    uuid: newUser.uuid,
                     name: newUser.name,
                     email: newUser.email,
                     role: newUser.role,

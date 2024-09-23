@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
 import { CreateUserBody } from './schemas/user-create.schema';
-import { updateUserBody } from './schemas/user-update.schema';
+import { UpdateUserBody } from './schemas/user-update.schema';
 
 export class UserController {
   constructor(private userService: UserService) { }
@@ -11,8 +11,8 @@ export class UserController {
     reply.send(users);
   }
 
-  async findById(request: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
-    const user = await this.userService.findById(request.params.id);
+  async findByUid(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
+    const user = await this.userService.findByUid(request.params.uuid);
     reply.send(user);
   }
 
@@ -24,15 +24,15 @@ export class UserController {
   }
 
   async update(
-    request: FastifyRequest<{ Params: { id: number }; Body: updateUserBody }>,
+    request: FastifyRequest<{ Params: { uuid: string }; Body: UpdateUserBody }>,
     reply: FastifyReply
   ) {
-    const user = await this.userService.update(request.params.id, request.body);
+    const user = await this.userService.update(request.params.uuid, request.body);
     reply.send(user);
   }
 
-  async delete(request: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
-    await this.userService.delete(request.params.id);
+  async delete(request: FastifyRequest<{ Params: { uuid: string } }>, reply: FastifyReply) {
+    await this.userService.delete(request.params.uuid);
     reply.status(204).send();
   }
 }

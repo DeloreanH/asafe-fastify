@@ -3,7 +3,8 @@ import { UserService } from './user.service';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { createContainer, asValue, asClass, InjectionMode } from 'awilix';
 import { Role as PrismaRole } from '@prisma/client';
-import { updateUserBody } from './schemas/user-update.schema';
+import { v4 as uuidv4 } from 'uuid';
+import { UpdateUserBody } from './schemas/user-update.schema';
 import { CreateUserBody } from './schemas/user-create.schema';
 
 describe('UserController', () => {
@@ -19,7 +20,7 @@ describe('UserController', () => {
             findByEmail: jest.fn(),
             create: jest.fn(),
             findAll: jest.fn(),
-            findById: jest.fn(),
+            findByUid: jest.fn(),
             update: jest.fn(),
             delete: jest.fn()
         } as unknown as jest.Mocked<UserService>;
@@ -50,6 +51,7 @@ describe('UserController', () => {
         it('should return all users', async () => {
             const mockUsers = [{
                 id: 1,
+                uuid: uuidv4(),
                 name: 'John Doe',
                 email: 'john@doe.com',
                 password: 'hashed_password',
@@ -67,10 +69,12 @@ describe('UserController', () => {
         });
     });
 
-    describe('findById', () => {
-        it('should return a user by id', async () => {
+    describe('findByUid', () => {
+        it('should return a user by uuid', async () => {
+            const uuid = uuidv4();
             const mockUser = {
                 id: 1,
+                uuid,
                 name: 'John Doe',
                 email: 'john@doe.com',
                 password: 'hashed_password',
@@ -78,15 +82,15 @@ describe('UserController', () => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
-            userService.findById.mockResolvedValue(mockUser);
+            userService.findByUid.mockResolvedValue(mockUser);
 
             mockRequest = {
-                params: { id: 1 },
+                params: { uuid },
             } as FastifyRequest;
 
-            await userController.findById(mockRequest as FastifyRequest<{ Params: { id: number } }>, mockReply as FastifyReply);
+            await userController.findByUid(mockRequest as FastifyRequest<{ Params: { uuid: string } }>, mockReply as FastifyReply);
 
-            expect(userService.findById).toHaveBeenCalledWith(1);
+            expect(userService.findByUid).toHaveBeenCalledWith(uuid);
             expect(mockReply.send).toHaveBeenCalledWith(mockUser);
         });
     });
@@ -96,6 +100,7 @@ describe('UserController', () => {
             const userData = { name: 'John Doe', email: 'john@doe.com', password: 'password' };
             const mockUser = {
                 id: 1,
+                uuid: uuidv4(),
                 ...userData,
                 password: 'hashed_password',
                 role: PrismaRole.BASIC,
@@ -117,8 +122,10 @@ describe('UserController', () => {
     describe('update', () => {
         it('should update a user', async () => {
             const userData = { name: 'new John Name' };
+            const uuid = uuidv4();
             const mockUser = {
                 id: 1,
+                uuid,
                 name: userData.name,
                 email: 'john@doe.com',
                 password: 'hashed_password',
@@ -128,23 +135,24 @@ describe('UserController', () => {
             };
 
             userService.update.mockResolvedValue(mockUser);
-            mockRequest.params = { id: 1 };
+            mockRequest.params = { uuid };
             mockRequest.body = userData;
 
-            await userController.update(mockRequest as FastifyRequest<{ Params: { id: number }; Body: updateUserBody }>, mockReply as FastifyReply);
+            await userController.update(mockRequest as FastifyRequest<{ Params: { uuid: string }; Body: UpdateUserBody }>, mockReply as FastifyReply);
 
-            expect(userService.update).toHaveBeenCalledWith(1, userData);
+            expect(userService.update).toHaveBeenCalledWith(uuid, userData);
             expect(mockReply.send).toHaveBeenCalledWith(mockUser);
         });
     });
 
     describe('delete', () => {
         it('should delete a user', async () => {
-            mockRequest.params = { id: 1 };
+            const uuid = uuidv4();
+            mockRequest.params = { uuid };
 
-            await userController.delete(mockRequest as FastifyRequest<{ Params: { id: number } }>, mockReply as FastifyReply);
+            await userController.delete(mockRequest as FastifyRequest<{ Params: { uuid: string } }>, mockReply as FastifyReply);
 
-            expect(userService.delete).toHaveBeenCalledWith(1);
+            expect(userService.delete).toHaveBeenCalledWith(uuid);
             expect(mockReply.status).toHaveBeenCalledWith(204);
             expect(mockReply.send).toHaveBeenCalled();
         });

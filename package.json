@@ -9,7 +9,8 @@
     "test": "jest",
     "migrate:dev": "prisma migrate dev --name init",
     "migrate:deploy": "prisma migrate deploy",
-    "migrate:reset": "prisma migrate reset"
+    "migrate:reset": "prisma migrate reset",
+    "migrate:status": "prisma migrate status"
   },
   "keywords": [],
   "author": "",
@@ -34,7 +35,8 @@
     "jsonwebtoken": "^9.0.2",
     "passport-http-bearer": "^1.0.1",
     "pg": "^8.13.0",
-    "prisma": "^5.19.1"
+    "prisma": "^5.19.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -42,6 +44,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.5.5",
     "@types/passport-http-bearer": "^1.0.41",
+    "@types/uuid": "^10.0.0",
     "jest": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
     "ts-jest": "^29.2.5",

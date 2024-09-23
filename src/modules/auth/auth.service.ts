@@ -6,7 +6,6 @@ import { UserRepository } from '../user/user.repository';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-
 export class AuthService {
   constructor(private userRepository: UserRepository) { }
 
@@ -50,6 +49,7 @@ export class AuthService {
     return {
       user: {
         id: createdUser.id,
+        uuid: createdUser.uuid,
         role: createdUser.role,
         name: createdUser.name,
         email: createdUser.email

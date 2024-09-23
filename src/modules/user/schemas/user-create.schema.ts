@@ -12,6 +12,7 @@ export type CreateUserBody = Static<typeof createUserBodySchema>;
 
 export const CreateUserResponseSchema = Type.Object({
   id: Type.Number(),
+  uuid: Type.String(),
   name: Type.String(),
   email: Type.String(),
   role: Type.String()

@@ -6,6 +6,7 @@ import { LoginBody } from './schemas/login.schema';
 import { signUpBody } from './schemas/signup.schema';
 import { asValue, asClass, createContainer, InjectionMode, AwilixContainer } from 'awilix';
 import { ConflictException, UnauthorizedException } from '../../shared/exceptions';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('AuthController', () => {
     let container: AwilixContainer;
@@ -88,6 +89,7 @@ describe('AuthController', () => {
             const signupResponse = {
                 user: {
                     id: 1,
+                    uuid: uuidv4(),
                     email: mockRequest.body.email,
                     name: mockRequest.body.name,
                     role: PrismaRole.BASIC,

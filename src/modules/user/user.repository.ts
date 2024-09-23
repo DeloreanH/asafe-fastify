@@ -1,32 +1,24 @@
 import { PrismaClient, User } from '@prisma/client';
 import { CreateUserBody } from './schemas/user-create.schema';
-import { updateUserBody } from './schemas/user-update.schema';
+import { UpdateUserBody } from './schemas/user-update.schema';
 
-interface IUserRepository {
-  findAll(): Promise<User[]>;
-  findById(id: number): Promise<User | null>;
-  create(data: Omit<User, 'id'>): Promise<User>;
-  update(id: number, data: Partial<Omit<User, 'id'>>): Promise<User>;
-  delete(id: number): Promise<User>;
-}
-
-export class UserRepository implements IUserRepository {
-  constructor(private prisma: PrismaClient) {}
+export class UserRepository {
+  constructor(private prisma: PrismaClient) { }
 
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
 
-  async findById(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { id } });
+  async findByUid(uuid: string): Promise<User | null> {
+    return this.prisma.user.findUnique({ where: { uuid } });
   }
 
   async create(data: CreateUserBody): Promise<User> {
     return this.prisma.user.create({ data });
   }
 
-  async update(id: number, data: updateUserBody): Promise<User> {
-    return this.prisma.user.update({ where: { id }, data });
+  async update(uuid: string, data: UpdateUserBody): Promise<User> {
+    return this.prisma.user.update({ where: { uuid }, data });
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -35,7 +27,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async delete(id: number): Promise<User> {
-    return this.prisma.user.delete({ where: { id } });
+  async delete(uuid: string): Promise<User> {
+    return this.prisma.user.delete({ where: { uuid } });
   }
 }

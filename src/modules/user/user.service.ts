@@ -2,23 +2,24 @@ import { User } from '@prisma/client';
 import { UserRepository } from './user.repository';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { ConflictException } from '../../shared/exceptions';
+import { UpdateUserBody } from './schemas/user-update.schema';
+import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { updateUserBody } from './schemas/user-update.schema';
 
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository) { }
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
   }
 
-  async findById(id: number): Promise<User | null> {
-    return this.userRepository.findById(id);
+  async findByUid(uuid: string): Promise<User | null> {
+    return this.userRepository.findByUid(uuid);
   }
 
   async create(data: CreateUserBody): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(data.email);
-    
+
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
@@ -33,11 +34,11 @@ export class UserService {
     return this.userRepository.create(userData);
   }
 
-  async update(id: number, data: updateUserBody): Promise<User> {
-    return this.userRepository.update(id, data);
+  async update(uuid: string, data: UpdateUserBody): Promise<User> {
+    return this.userRepository.update(uuid, data);
   }
 
-  async delete(id: number): Promise<User> {
-    return this.userRepository.delete(id);
+  async delete(uuid: string): Promise<User> {
+    return this.userRepository.delete(uuid);
   }
 }

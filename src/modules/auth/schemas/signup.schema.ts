@@ -13,6 +13,7 @@ export type signUpBody = Static<typeof signUpBodySchema>;
 export const signUpResponseSchema = Type.Object({
   user: Type.Object({
     id: Type.Number(),
+    uuid: Type.String(),
     name: Type.String(),
     email: Type.String(),
     role: Type.String()
