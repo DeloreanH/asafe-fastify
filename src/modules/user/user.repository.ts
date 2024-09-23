@@ -1,5 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { CreateUserBody } from './schemas/user-create.schema';
+import { updateUserBody } from './schemas/user-update.schema';
 
 interface IUserRepository {
   findAll(): Promise<User[]>;
@@ -24,7 +25,7 @@ export class UserRepository implements IUserRepository {
     return this.prisma.user.create({ data });
   }
 
-  async update(id: number, data: Partial<Omit<User, 'id'>>): Promise<User> {
+  async update(id: number, data: updateUserBody): Promise<User> {
     return this.prisma.user.update({ where: { id }, data });
   }
 

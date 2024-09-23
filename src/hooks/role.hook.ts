@@ -23,7 +23,7 @@ export function roleHook(requiredPermissions: string[]) {
     const user = req.user as { role: PrismaRole; permissions: string[] };
     const userPermissions = rolesPermissions[user?.role] || [];
     const hasPermission = requiredPermissions.every(permission => userPermissions.includes(permission));
-
+    
     if (!user || !hasPermission) {
       throw new ForbiddenException('Forbidden: Insufficient permissions');
     }

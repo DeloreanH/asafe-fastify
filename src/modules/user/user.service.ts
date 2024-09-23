@@ -3,6 +3,7 @@ import { UserRepository } from './user.repository';
 import { CreateUserBody } from './schemas/user-create.schema';
 import { ConflictException } from '../../shared/exceptions';
 import bcrypt from 'bcrypt';
+import { updateUserBody } from './schemas/user-update.schema';
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}
@@ -32,7 +33,7 @@ export class UserService {
     return this.userRepository.create(userData);
   }
 
-  async update(id: number, data: Partial<Omit<User, 'id'>>): Promise<User> {
+  async update(id: number, data: updateUserBody): Promise<User> {
     return this.userRepository.update(id, data);
   }
 
