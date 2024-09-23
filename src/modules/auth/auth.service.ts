@@ -7,7 +7,6 @@ import { User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-
 export class AuthService {
   constructor(private userRepository: UserRepository) { }
 

@@ -7,7 +7,7 @@ import { authHook } from '../../hooks/auth.hook';
 export async function healthRoutes(fastify: FastifyInstance) {
   const healthController = fastify.diContainer.resolve<HealthController>('healthController');
 
-  fastify.get('/', {
+  fastify.get('', {
     schema: {
       response: {
         200: HealthResponseSchema
