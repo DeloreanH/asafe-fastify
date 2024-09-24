@@ -33,7 +33,7 @@ const env = envSchema<Static<typeof schema>>({
   schema,
 });
 
-export default {
+export const config = {
   nodeEnv: env.NODE_ENV,
   isDevelopment: env.NODE_ENV === NodeEnv.development,
   isProduction: env.NODE_ENV === NodeEnv.production,
@@ -43,7 +43,7 @@ export default {
   },
   server: {
     host: env.HOST,
-    port: env.PORT,
+    port: env.PORT ?? 3000,
   },
   db: {
     url: `postgres://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_URL}/${env.POSTGRES_DB}?sslmode=disable`,

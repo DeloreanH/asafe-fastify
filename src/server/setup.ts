@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { env } from '../config';
+import { config } from '../config';
 import { prisma } from './prisma/client';
 import { fastifyAwilixPlugin } from '@fastify/awilix';
 import { asValue, createContainer, InjectionMode } from 'awilix';
@@ -15,8 +15,8 @@ export default async function setupFastifyApp(fastify: FastifyInstance) {
   // helmet
   await fastify.register(Helmet, {
     global: true,
-    contentSecurityPolicy: !env.isDevelopment,
-    crossOriginEmbedderPolicy: !env.isDevelopment,
+    contentSecurityPolicy: !config.isDevelopment,
+    crossOriginEmbedderPolicy: !config.isDevelopment,
   });
 
   // cors
@@ -32,7 +32,7 @@ export default async function setupFastifyApp(fastify: FastifyInstance) {
 
   // fastify jwt
   fastify.register(fastifyJWT, {
-    secret: env.jwt.secret,
+    secret: config.jwt.secret,
   });
 
   // di injection

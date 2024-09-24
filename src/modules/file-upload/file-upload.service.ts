@@ -1,5 +1,5 @@
 import { Storage } from '@google-cloud/storage';
-import { env } from '../../config';
+import { config } from '../../config';
 import { InternalServerErrorException } from '../../shared/exceptions';
 import { MultipartFile } from '@fastify/multipart';
 
@@ -14,9 +14,9 @@ export class FileUploadService {
 
   constructor() {
     this.storage = new Storage({
-      keyFilename: env.gcc.svc!,
+      keyFilename: config.gcc.svc!,
     });
-    this.bucketName = env.gcc.bucketName;
+    this.bucketName = config.gcc.bucketName;
   }
 
   async uploadFile(file: MultipartFile, userUid: string): Promise<string> {
