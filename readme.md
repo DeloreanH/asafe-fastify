@@ -90,18 +90,23 @@ set GOOGLE_APPLICATION_CREDENTIALS=path\to\key.json  # Windows
    ```bash
    docker-compose up -d
    ```
-
+   
 2. **Install dependencies**:
    ```bash
    npm install
    ```
+   
+3. **run prisma migrations**:
+   ```bash
+   npm run migrate:dev
+   ```
 
-3. **Start the application in development mode**:
+4. **Start the application in development mode**:
    ```bash
    npm run start:dev
    ```
 
-4. Access Swagger documentation at:
+5. Access Swagger documentation at:
    ```
    http://localhost:{PORT || 3000}/api-docs
    ```
